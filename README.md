@@ -18,6 +18,10 @@ Claude: *generates a self-contained SpinningLogo3D.tsx component*
 
 ### What it looks like
 
+<!-- TODO: Add a GIF/video of a spinning logo here -->
+<!-- Record a 10-second screen capture and convert to GIF -->
+<!-- See "Adding Examples" section below -->
+
 | Front face | Edge profile | Back face |
 |:---:|:---:|:---:|
 | Your logo, crisp and clear | Chrome rim follows your logo's exact shape | Logo readable on both sides |
@@ -68,20 +72,20 @@ function Hero() {
 
 ## Examples That Work Great
 
-### Gaming / Esports Logos
+### Startup & SaaS Logos
+Clean tech logos, app icons, brand marks. The chrome rim gives them instant premium feel.
+
+### Gaming & Esports Logos
 Shield-shaped logos, mascots, badges. The chrome rim follows the shield outline perfectly.
-
-### Company Badges
-Round or rectangular company logos. Dark backgrounds get auto-removed; the rim adapts to any shape.
-
-### Open Source Project Logos
-Hexagonal, circular, or custom-shaped. The perimeter extraction handles any silhouette.
-
-### Military / Tactical Emblems
-Eagles, stars, crossed swords. The coin effect adds a medal-like premium feel.
 
 ### Sports Team Crests
 Shield crests, circular emblems. The 3D depth makes them feel like real championship coins.
+
+### Agency & Studio Logos
+Wordmarks, monograms, abstract shapes. Any silhouette works.
+
+### Open Source Project Logos
+Hexagonal, circular, or custom-shaped. The perimeter extraction handles any silhouette.
 
 ---
 
@@ -92,9 +96,9 @@ Choose the reflection vibe that matches your brand:
 | Preset | Best for | Feeling |
 |--------|----------|---------|
 | **studio** | Corporate, SaaS, portfolios | Clean, professional, neutral chrome |
-| **warehouse** | Gaming, industrial, tactical | Gritty, dark, textured |
+| **warehouse** | Gaming, industrial, edgy brands | Gritty, dark, textured |
 | **city** | Tech, startups, modern apps | Urban, bright, dynamic |
-| **night** | Military, security, dark themes | Moody, tactical, stealth |
+| **night** | Dark themes, premium brands | Moody, elegant, sleek |
 | **dawn** | Health, wellness, calm brands | Soft, warm, inviting |
 | **sunset** | Creative, entertainment | Rich amber tones |
 
@@ -144,7 +148,7 @@ npm install -D @types/three
 
 PRs welcome! Some ideas for contributions:
 
-- **More environment presets** - Custom HDR environments (military, space, underwater)
+- **More environment presets** - Custom HDR environments (space, underwater, neon)
 - **Interaction** - Hover to pause/speed up, click to flip, drag to rotate manually
 - **Glow effects** - Post-processing bloom around the rim
 - **Multiple logos** - Carousel of spinning coins
@@ -159,6 +163,36 @@ PRs welcome! Some ideas for contributions:
 3. Edit `.claude/skills/3d-logo/SKILL.md`
 4. Test with `claude install .` in the repo root
 5. Open a PR with before/after examples
+
+---
+
+## Adding Examples
+
+Want to add example screenshots/GIFs to this README? Here's how:
+
+### Where to find free logos to demo
+
+1. **[SVGRepo](https://www.svgrepo.com)** - Free SVG logos. Download as PNG or screenshot at high res
+2. **[Logopond](https://logopond.com)** - Logo inspiration (check individual licenses)
+3. **[Brandfetch](https://brandfetch.com)** - Brand logos (for demo purposes)
+4. **Your own logos** - Best option! Create a quick logo with [Canva](https://canva.com) or [Figma](https://figma.com)
+5. **AI-generated logos** - Use any AI image generator to create a logo specifically for the demo
+
+### What makes a good demo logo
+
+- **Dark background** (black or near-black) - the skill removes it automatically
+- **Colorful / glowing edges** - looks stunning as a 3D coin
+- **Clear silhouette** - shields, circles, badges, crests work best
+- **High resolution** (512x512 or 1024x1024) - more detail in the rim
+
+### How to capture the demo
+
+1. Run the skill on a logo in a test React project
+2. Open the page in Chrome
+3. Use a screen recorder (OBS, ShareX, or Chrome's built-in recorder)
+4. Capture a 5-10 second loop of the coin spinning
+5. Convert to GIF with [ezgif.com](https://ezgif.com) or `ffmpeg -i video.mp4 -vf "fps=15,scale=600:-1" demo.gif`
+6. Add to `screenshots/` folder and reference in this README
 
 ---
 

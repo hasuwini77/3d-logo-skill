@@ -202,7 +202,7 @@ Ask the user which reflection environment they want:
 - **"studio"** — clean, professional, neutral chrome
 - **"warehouse"** — industrial, gritty, darker
 - **"city"** — urban reflections, bright
-- **"night"** — dark, moody, tactical
+- **"night"** — dark, moody, elegant
 - **"dawn"** — soft, warm
 - **"sunset"** — amber warmth
 
