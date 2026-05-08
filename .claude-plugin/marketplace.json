@@ -1,0 +1,36 @@
+{
+  "name": "3d-logo-skill",
+  "id": "3d-logo-skill",
+  "owner": {
+    "name": "hasuwini77"
+  },
+  "metadata": {
+    "description": "Turn any logo into a premium 3D spinning coin with chrome edges and environment reflections using React Three Fiber",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "3d-logo",
+      "source": "./",
+      "description": "Create a 3D spinning coin/medal effect from any logo image. Auto-detects outline, removes backgrounds, builds chrome rim following logo shape, adds environment reflections. Works with any PNG/JPG logo.",
+      "version": "1.0.0",
+      "author": {
+        "name": "hasuwini77"
+      },
+      "keywords": [
+        "3d",
+        "logo",
+        "spinning",
+        "coin",
+        "react-three-fiber",
+        "three.js",
+        "animation",
+        "chrome",
+        "medal",
+        "r3f"
+      ],
+      "category": "design",
+      "strict": false
+    }
+  ]
+}

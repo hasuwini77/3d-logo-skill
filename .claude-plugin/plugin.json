@@ -1,0 +1,11 @@
+{
+  "name": "3d-logo",
+  "description": "Create a 3D spinning coin/medal effect from any logo image using React Three Fiber. Auto-detects the logo's outline, removes dark backgrounds, builds a chrome-rimmed coin that follows the exact logo shape, and adds environment reflections. Use when the user wants a 3D logo, spinning logo, rotating logo, coin effect, medal effect, or logo animation.",
+  "version": "1.0.0",
+  "author": {
+    "name": "hasuwini77"
+  },
+  "license": "MIT",
+  "keywords": ["3d", "logo", "spinning", "coin", "react-three-fiber", "three.js", "animation", "chrome", "medal"],
+  "skills": ["./.claude/skills/3d-logo"]
+}
