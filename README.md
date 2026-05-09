@@ -1,34 +1,29 @@
-# 3D Logo Skill for Claude Code
+<div align="center">
 
-**Turn any flat logo into a premium 3D spinning coin with chrome edges and environment reflections.**
+# `>_ 3d-logo`
 
-One command. Any logo. Zero 3D modeling experience needed.
+**Turn any flat logo into a premium 3D spinning coin.**\
+Chrome edges &bull; Environment reflections &bull; Zero 3D modeling.
 
----
+[![Claude Code Skill](https://img.shields.io/badge/Claude_Code-skill-6C5CE7?style=flat-square&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0wIDE4Yy00LjQyIDAtOC0zLjU4LTgtOHMzLjU4LTggOC04IDggMy41OCA4IDgtMy41OCA4LTggOHoiLz48L3N2Zz4=)](https://github.com/hasuwini77/3d-logo-skill)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
+[![React Three Fiber](https://img.shields.io/badge/R3F-Three.js-black?style=flat-square&logo=threedotjs)](https://github.com/pmndrs/react-three-fiber)
 
-## Demo
-
-```
-You: "Use /3d-logo on public/logo.png"
-
-Claude: *generates a self-contained SpinningLogo3D.tsx component*
-        *auto-detects outline, removes background, builds chrome rim*
-        *logo spins as a shiny 3D coin in your React app*
-```
-
-### What it looks like
-
-<!-- TODO: Add a GIF/video of a spinning logo here -->
-<!-- Record a 10-second screen capture and convert to GIF -->
-<!-- See "Adding Examples" section below -->
-
-| Front face | Edge profile | Back face |
-|:---:|:---:|:---:|
-| Your logo, crisp and clear | Chrome rim follows your logo's exact shape | Logo readable on both sides |
-
-> The rim isn't a generic circle. It traces your logo's actual outline pixel by pixel.
+</div>
 
 ---
+
+<div align="center">
+<table>
+<tr>
+<td align="center"><img src="screenshots/logo1.gif" width="260" alt="Phoenix Shield 3D coin" /><br/><sub><b>Phoenix Shield</b></sub></td>
+<td align="center"><img src="screenshots/logo2.gif" width="260" alt="Cosmic Eye 3D coin" /><br/><sub><b>Cosmic Eye</b></sub></td>
+<td align="center"><img src="screenshots/logo3.gif" width="260" alt="Wolf Compass 3D coin" /><br/><sub><b>Wolf Compass</b></sub></td>
+</tr>
+</table>
+</div>
+
+> The rim isn't a generic circle — it traces your logo's actual outline pixel by pixel.
 
 ## Install
 
@@ -36,179 +31,74 @@ Claude: *generates a self-contained SpinningLogo3D.tsx component*
 claude install github:hasuwini77/3d-logo-skill
 ```
 
-That's it. The skill is now available in Claude Code.
-
 ## Usage
-
-Just tell Claude what you want:
 
 ```
 Make my logo at public/logo.png into a 3D spinning coin
 ```
-
 ```
-Use /3d-logo on src/assets/brand-logo.png with warehouse reflections
-```
-
-```
-Create a 3D spinning medal from this company logo
+Use /3d-logo on src/assets/brand-logo.png with night reflections
 ```
 
-Claude generates a drop-in `SpinningLogo3D.tsx` component you can use anywhere in your React app:
+Drop the generated component anywhere in your React app:
 
 ```tsx
 import { SpinningLogo3D } from './SpinningLogo3D'
 
-function Hero() {
-  return (
-    <div className="flex justify-center py-12">
-      <SpinningLogo3D size={540} />
-    </div>
-  )
-}
+<SpinningLogo3D size={540} />
 ```
-
----
-
-## Examples That Work Great
-
-### Startup & SaaS Logos
-Clean tech logos, app icons, brand marks. The chrome rim gives them instant premium feel.
-
-### Gaming & Esports Logos
-Shield-shaped logos, mascots, badges. The chrome rim follows the shield outline perfectly.
-
-### Sports Team Crests
-Shield crests, circular emblems. The 3D depth makes them feel like real championship coins.
-
-### Agency & Studio Logos
-Wordmarks, monograms, abstract shapes. Any silhouette works.
-
-### Open Source Project Logos
-Hexagonal, circular, or custom-shaped. The perimeter extraction handles any silhouette.
-
----
 
 ## Environment Presets
 
-Choose the reflection vibe that matches your brand:
-
 | Preset | Best for | Feeling |
 |--------|----------|---------|
-| **studio** | Corporate, SaaS, portfolios | Clean, professional, neutral chrome |
-| **warehouse** | Gaming, industrial, edgy brands | Gritty, dark, textured |
-| **city** | Tech, startups, modern apps | Urban, bright, dynamic |
-| **night** | Dark themes, premium brands | Moody, elegant, sleek |
-| **dawn** | Health, wellness, calm brands | Soft, warm, inviting |
-| **sunset** | Creative, entertainment | Rich amber tones |
+| **studio** | Corporate, SaaS | Clean, professional |
+| **warehouse** | Gaming, industrial | Gritty, textured |
+| **city** | Tech, startups | Urban, dynamic |
+| **night** | Dark themes, premium | Moody, elegant |
+| **dawn** | Health, wellness | Soft, warm |
+| **sunset** | Creative, entertainment | Rich amber |
 
-```
-"Use /3d-logo on my logo with night reflections"
-```
+## How It Works
 
----
+1. **Background removal** — dark pixels converted to transparent via offscreen canvas
+2. **Perimeter extraction** — alpha channel scanned row-by-row to trace the logo outline (~400 vertices)
+3. **Face rendering** — two `PlaneGeometry` faces with correct UVs (readable on both sides)
+4. **Chrome rim** — custom `BufferGeometry` quad strip connecting front-edge to back-edge around the perimeter
+5. **Reflections** — drei `<Environment>` with `metalness: 1.0, roughness: 0.03` for polished chrome
 
-## How It Works Under the Hood
+## Customization
 
-1. **Background removal** - Loads the image into an offscreen canvas, scans every pixel, converts dark pixels (brightness < threshold) to transparent. Works even on JPEGs pretending to be PNGs.
-
-2. **Perimeter extraction** - Scans the alpha channel row-by-row to find the leftmost and rightmost opaque pixel per row. Traces the full outline as a polygon with ~400 vertices.
-
-3. **Face rendering** - Two `PlaneGeometry` faces (front + back) with the transparent texture. PlaneGeometry UVs are naturally correct, so text reads properly on both sides.
-
-4. **Chrome rim** - Custom `BufferGeometry` built as a quad strip connecting front-edge to back-edge around the perimeter. `DoubleSide` rendering ensures full coverage.
-
-5. **Environment reflections** - drei's `<Environment>` component provides HDR reflections. Combined with `metalness: 1.0, roughness: 0.03`, the rim looks like polished chrome.
-
----
-
-## Customizable Constants
-
-| Constant | Default | What it does |
-|----------|---------|-------------|
-| `PLANE_SIZE` | 4.8 | Logo face size in 3D units |
+| Constant | Default | Controls |
+|----------|---------|----------|
+| `PLANE_SIZE` | 4.8 | Logo face size (3D units) |
 | `THICKNESS` | 0.45 | Coin edge thickness |
 | `SPIN_SPEED` | 0.35 | Rotation speed (rad/s) |
-| `BG_THRESHOLD` | 18 | Background removal sensitivity (0-255) |
-
----
+| `BG_THRESHOLD` | 18 | Background removal sensitivity (0–255) |
 
 ## Requirements
-
-Your project needs React and these packages:
 
 ```bash
 npm install three @react-three/fiber @react-three/drei
 npm install -D @types/three
 ```
 
----
-
 ## Contributing
 
-PRs welcome! Some ideas for contributions:
+1. Fork &rarr; feature branch &rarr; edit `.claude/skills/3d-logo/SKILL.md`
+2. Test locally with `claude install .`
+3. Open a PR with before/after examples
 
-- **More environment presets** - Custom HDR environments (space, underwater, neon)
-- **Interaction** - Hover to pause/speed up, click to flip, drag to rotate manually
-- **Glow effects** - Post-processing bloom around the rim
-- **Multiple logos** - Carousel of spinning coins
-- **Performance** - `frameloop="demand"` option for static pages
-- **Shape detection** - Better algorithms for complex outlines (concave shapes, holes)
-- **Export** - Generate a video/GIF of the spinning logo
-
-### How to contribute
-
-1. Fork this repo
-2. Create a feature branch
-3. Edit `.claude/skills/3d-logo/SKILL.md`
-4. Test with `claude install .` in the repo root
-5. Open a PR with before/after examples
-
----
-
-## Adding Examples
-
-Want to add example screenshots/GIFs to this README? Here's how:
-
-### Where to find free logos to demo
-
-1. **[SVGRepo](https://www.svgrepo.com)** - Free SVG logos. Download as PNG or screenshot at high res
-2. **[Logopond](https://logopond.com)** - Logo inspiration (check individual licenses)
-3. **[Brandfetch](https://brandfetch.com)** - Brand logos (for demo purposes)
-4. **Your own logos** - Best option! Create a quick logo with [Canva](https://canva.com) or [Figma](https://figma.com)
-5. **AI-generated logos** - Use any AI image generator to create a logo specifically for the demo
-
-### What makes a good demo logo
-
-- **Dark background** (black or near-black) - the skill removes it automatically
-- **Colorful / glowing edges** - looks stunning as a 3D coin
-- **Clear silhouette** - shields, circles, badges, crests work best
-- **High resolution** (512x512 or 1024x1024) - more detail in the rim
-
-### How to capture the demo
-
-1. Run the skill on a logo in a test React project
-2. Open the page in Chrome
-3. Use a screen recorder (OBS, ShareX, or Chrome's built-in recorder)
-4. Capture a 5-10 second loop of the coin spinning
-5. Convert to GIF with [ezgif.com](https://ezgif.com) or `ffmpeg -i video.mp4 -vf "fps=15,scale=600:-1" demo.gif`
-6. Add to `screenshots/` folder and reference in this README
-
----
-
-## Tech Stack
-
-Built with:
-- [React Three Fiber](https://github.com/pmndrs/react-three-fiber) - React renderer for Three.js
-- [drei](https://github.com/pmndrs/drei) - Useful helpers for R3F
-- [Three.js](https://threejs.org/) - 3D library
-
----
+Ideas: more presets, hover interactions, glow effects, shape detection improvements.
 
 ## License
 
-MIT - do whatever you want with it.
+MIT &mdash; do whatever you want with it.
 
 ---
 
-**If this skill saved you time, drop a star!**
+<div align="center">
+<sub>Built with <a href="https://github.com/pmndrs/react-three-fiber">React Three Fiber</a> + <a href="https://github.com/pmndrs/drei">drei</a> + <a href="https://threejs.org">Three.js</a></sub>
+<br/><br/>
+<b>If this skill saved you time, drop a ⭐</b>
+</div>
