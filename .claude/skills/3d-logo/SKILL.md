@@ -95,18 +95,41 @@ function extractPerimeter(data: Uint8ClampedArray, width: number, height: number
   }
   // Right edge top→bottom, then left edge bottom→top = closed perimeter
   const raw = [...rightEdge, ...leftEdge.reverse()]
-  // Simplify to ~400 vertices
-  const step = Math.max(1, Math.floor(raw.length / 400))
-  return raw.filter((_, i) => i % step === 0).map(([px, py]) => [
+  // Simplify to ~800 vertices for smooth rim reflections
+  const step = Math.max(1, Math.floor(raw.length / 800))
+  const sampled = raw.filter((_, i) => i % step === 0).map(([px, py]) => [
     px / width - 0.5,
     0.5 - py / height,
   ] as [number, number])
+  // Laplacian smoothing removes pixel-level jitter for cleaner reflections
+  return smoothOutline(sampled, 5)
+}
+
+function smoothOutline(outline: [number, number][], iterations: number): [number, number][] {
+  let pts = outline
+  for (let iter = 0; iter < iterations; iter++) {
+    const n = pts.length
+    const next: [number, number][] = []
+    for (let i = 0; i < n; i++) {
+      const prev = pts[(i - 1 + n) % n]
+      const curr = pts[i]
+      const nxt = pts[(i + 1) % n]
+      next.push([
+        curr[0] + 0.5 * ((prev[0] + nxt[0]) / 2 - curr[0]),
+        curr[1] + 0.5 * ((prev[1] + nxt[1]) / 2 - curr[1]),
+      ])
+    }
+    pts = next
+  }
+  return pts
 }
 ```
 
+**Why smoothing matters:** The perimeter traces pixel boundaries, creating micro-jitter. Each jagged step produces a slightly different normal, which chrome (metalness=1, low roughness) amplifies into visible horizontal bands. Laplacian smoothing averages each vertex toward its neighbors, producing a continuous curve that reflects the environment smoothly.
+
 #### 2c. Rim geometry builder
 
-Build a quad strip connecting front edge (z=+half) to back edge (z=-half) around the perimeter. Use `DoubleSide` rendering to avoid normal-direction issues:
+Build an indexed ring with manually computed tangent-based normals. Each vertex's outward normal is derived from the averaged tangent direction of its neighbors — this produces much smoother reflections than `computeVertexNormals()` which averages face normals:
 
 ```tsx
 function buildRim(outline: [number, number][], planeSize: number, thickness: number) {
@@ -115,25 +138,40 @@ function buildRim(outline: [number, number][], planeSize: number, thickness: num
   const n = outline.length
   const positions: number[] = []
   const normals: number[] = []
+  const indices: number[] = []
+  for (let i = 0; i < n; i++) {
+    const prev = outline[(i - 1 + n) % n]
+    const curr = outline[i]
+    const next = outline[(i + 1) % n]
+    // Averaged tangent → perpendicular = smooth outward normal
+    const tx = next[0] - prev[0]
+    const ty = next[1] - prev[1]
+    const len = Math.sqrt(tx * tx + ty * ty) || 1
+    const nx = ty / len
+    const ny = -tx / len
+    const x = curr[0] * s
+    const y = curr[1] * s
+    positions.push(x, y, half)    // front vertex
+    normals.push(nx, ny, 0)
+    positions.push(x, y, -half)   // back vertex
+    normals.push(nx, ny, 0)
+  }
   for (let i = 0; i < n; i++) {
     const i2 = (i + 1) % n
-    const x1 = outline[i][0] * s, y1 = outline[i][1] * s
-    const x2 = outline[i2][0] * s, y2 = outline[i2][1] * s
-    const ex = x2 - x1, ey = y2 - y1
-    const len = Math.sqrt(ex * ex + ey * ey) || 1
-    const nx = ey / len, ny = -ex / len
-    positions.push(
-      x1, y1, half, x1, y1, -half, x2, y2, half,
-      x1, y1, -half, x2, y2, -half, x2, y2, half,
-    )
-    normals.push(nx, ny, 0, nx, ny, 0, nx, ny, 0, nx, ny, 0, nx, ny, 0, nx, ny, 0)
+    const f1 = i * 2, b1 = i * 2 + 1
+    const f2 = i2 * 2, b2 = i2 * 2 + 1
+    indices.push(f1, b1, f2)
+    indices.push(b1, b2, f2)
   }
   const geo = new BufferGeometry()
   geo.setAttribute('position', new Float32BufferAttribute(positions, 3))
   geo.setAttribute('normal', new Float32BufferAttribute(normals, 3))
+  geo.setIndex(indices)
   return geo
 }
 ```
+
+**Why tangent-based normals:** `computeVertexNormals()` averages face normals weighted by area — with hundreds of thin horizontal quads, the face normals barely differ between neighbors, so averaging doesn't help. Computing normals from the outline tangent direction gives each vertex a geometrically correct outward normal that interpolates smoothly along the rim surface.
 
 #### 2d. Coin assembly
 
@@ -161,7 +199,7 @@ function Coin() {
       </mesh>
       <mesh geometry={rimGeometry}>
         <meshStandardMaterial
-          color="#8ecae6" metalness={1.0} roughness={0.03}
+          color="#8ecae6" metalness={1.0} roughness={0.12}
           emissive="#06b6d4" emissiveIntensity={0.15}
           envMapIntensity={1.5} side={DoubleSide}
         />
