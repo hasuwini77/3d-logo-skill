@@ -62,10 +62,10 @@ import { SpinningLogo3D } from './SpinningLogo3D'
 ## How It Works
 
 1. **Background removal** — dark pixels converted to transparent via offscreen canvas
-2. **Perimeter extraction** — alpha channel scanned row-by-row to trace the logo outline (~400 vertices)
+2. **Perimeter extraction** — alpha channel scanned row-by-row to trace the logo outline (~800 vertices)
 3. **Face rendering** — two `PlaneGeometry` faces with correct UVs (readable on both sides)
-4. **Chrome rim** — custom `BufferGeometry` quad strip connecting front-edge to back-edge around the perimeter
-5. **Reflections** — drei `<Environment>` with `metalness: 1.0, roughness: 0.03` for polished chrome
+4. **Rounded chrome rim** — semicircular cross-section `BufferGeometry` (8 segments) with normals that sweep from front-facing to outward to back-facing, producing a smooth highlight gradient like a real coin edge
+5. **Reflections** — `MeshPhysicalMaterial` with `metalness: 1.0, roughness: 0.12, clearcoat: 1.0` for polished chrome with a wet lacquer finish
 
 ## Customization
 
