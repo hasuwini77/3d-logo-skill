@@ -5,6 +5,7 @@
 **Turn any flat logo into a premium 3D spinning coin.**\
 Chrome edges &bull; Environment reflections &bull; Zero 3D modeling.
 
+[![Agent Skill](https://img.shields.io/badge/Agent_Skill-compatible-00C853?style=flat-square)](https://agentskills.io)
 [![Claude Code Skill](https://img.shields.io/badge/Claude_Code-skill-6C5CE7?style=flat-square&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0wIDE4Yy00LjQyIDAtOC0zLjU4LTgtOHMzLjU4LTggOC04IDggMy41OCA4IDgtMy41OCA4LTggOHoiLz48L3N2Zz4=)](https://github.com/hasuwini77/3d-logo-skill)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 [![React Three Fiber](https://img.shields.io/badge/R3F-Three.js-black?style=flat-square&logo=threedotjs)](https://github.com/pmndrs/react-three-fiber)
@@ -27,21 +28,30 @@ Chrome edges &bull; Environment reflections &bull; Zero 3D modeling.
 
 ## Install
 
+Works with any AI coding agent that supports the [Agent Skills specification](https://agentskills.io) — Claude Code, Cursor, Codex, Gemini CLI, GitHub Copilot, and [50+ more](https://agentskills.io/specification).
+
 ```bash
 npx skills add hasuwini77/3d-logo-skill
 ```
 
 <details>
-<summary>Other install methods</summary>
+<summary>Agent-specific install</summary>
 
 ```bash
-# Claude Code native
+# Claude Code
 claude install github:hasuwini77/3d-logo-skill
+
+# Cursor / Copilot / Gemini CLI / others
+npx skills add hasuwini77/3d-logo-skill
 ```
+
+The `npx skills add` command auto-detects which agents you have installed and places the skill in the correct directory for each.
 
 </details>
 
 ## Usage
+
+Once installed, just ask your agent:
 
 ```
 Make my logo at public/logo.png into a 3D spinning coin
@@ -49,8 +59,11 @@ Make my logo at public/logo.png into a 3D spinning coin
 ```
 Use /3d-logo on src/assets/brand-logo.png with night reflections
 ```
+```
+Turn my brand logo into a spinning 3D medal with sunset reflections
+```
 
-Drop the generated component anywhere in your React app:
+The skill generates a self-contained `SpinningLogo3D.tsx` component. Drop it anywhere in your React app:
 
 ```tsx
 import { SpinningLogo3D } from './SpinningLogo3D'
