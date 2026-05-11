@@ -2,27 +2,33 @@
 
 # `>_ 3d-logo`
 
-**Turn any flat logo into a premium 3D spinning coin.**\
-Chrome edges &bull; Environment reflections &bull; Zero 3D modeling.
+### Turn any flat logo into a premium 3D spinning coin.
 
-[![Agent Skill](https://img.shields.io/badge/Agent_Skill-compatible-00C853?style=flat-square)](https://agentskills.io)
-[![Claude Code Skill](https://img.shields.io/badge/Claude_Code-skill-6C5CE7?style=flat-square&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0wIDE4Yy00LjQyIDAtOC0zLjU4LTgtOHMzLjU4LTggOC04IDggMy41OCA4IDgtMy41OCA4LTggOHoiLz48L3N2Zz4=)](https://github.com/hasuwini77/3d-logo-skill)
+<br/>
+
+<img src="screenshots/logo1.gif" width="280" alt="Phoenix Shield 3D coin" />&nbsp;&nbsp;&nbsp;<img src="screenshots/logo2.gif" width="280" alt="Cosmic Eye 3D coin" />&nbsp;&nbsp;&nbsp;<img src="screenshots/logo3.gif" width="280" alt="Wolf Compass 3D coin" />
+
+<sub><b>Phoenix Shield</b> &nbsp;&bull;&nbsp; <b>Cosmic Eye</b> &nbsp;&bull;&nbsp; <b>Wolf Compass</b></sub>
+
+<br/><br/>
+
+Chrome edges &bull; Environment reflections &bull; Zero 3D modeling\
+**One command. Any logo. Instant 3D.**
+
+<br/>
+
+[![Agent Skill](https://img.shields.io/badge/Agent_Skill-compatible-00C853?style=for-the-badge)](https://agentskills.io)&nbsp;
+[![Claude Code](https://img.shields.io/badge/Claude_Code-6C5CE7?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0wIDE4Yy00LjQyIDAtOC0zLjU4LTgtOHMzLjU4LTggOC04IDggMy41OCA4IDgtMy41OCA4LTggOHoiLz48L3N2Zz4=)](https://github.com/hasuwini77/3d-logo-skill)&nbsp;
+[![Cursor](https://img.shields.io/badge/Cursor-000?style=for-the-badge)](https://cursor.com)&nbsp;
+[![Copilot](https://img.shields.io/badge/GitHub_Copilot-000?style=for-the-badge&logo=githubcopilot&logoColor=white)](https://github.com/features/copilot)&nbsp;
+[![Gemini CLI](https://img.shields.io/badge/Gemini_CLI-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://github.com/google-gemini/gemini-cli)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 [![React Three Fiber](https://img.shields.io/badge/R3F-Three.js-black?style=flat-square&logo=threedotjs)](https://github.com/pmndrs/react-three-fiber)
 
 </div>
 
 ---
-
-<div align="center">
-<table>
-<tr>
-<td align="center"><img src="screenshots/logo1.gif" width="260" alt="Phoenix Shield 3D coin" /><br/><sub><b>Phoenix Shield</b></sub></td>
-<td align="center"><img src="screenshots/logo2.gif" width="260" alt="Cosmic Eye 3D coin" /><br/><sub><b>Cosmic Eye</b></sub></td>
-<td align="center"><img src="screenshots/logo3.gif" width="260" alt="Wolf Compass 3D coin" /><br/><sub><b>Wolf Compass</b></sub></td>
-</tr>
-</table>
-</div>
 
 > The rim isn't a generic circle — it traces your logo's actual outline pixel by pixel.
 
