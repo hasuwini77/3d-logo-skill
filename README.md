@@ -1,8 +1,13 @@
 <div align="center">
 
-# `>_ 3d-logo`
+```
+  ▀▀▀▄  █▀▀▄        █    ▄▀▀▄  ▄▀▀   ▄▀▀▄         >_ agent skill
+    ▀█  █  █  ▀▀▀▀  █    █  █  █ ▄█  █  █          chrome edges
+  ▄▄▄▀  █▄▄▀        █▄▄  ▀▄▄▀  ▀▄▄▀  ▀▄▄▀          environment reflections
+                                                     zero 3D modeling
+```
 
-### Turn any flat logo into a premium 3D spinning coin.
+**One command. Any logo. Instant 3D.**
 
 <br/>
 
@@ -11,11 +16,6 @@
 <sub><b>Phoenix Shield</b> &nbsp;&bull;&nbsp; <b>Cosmic Eye</b> &nbsp;&bull;&nbsp; <b>Wolf Compass</b></sub>
 
 <br/><br/>
-
-Chrome edges &bull; Environment reflections &bull; Zero 3D modeling\
-**One command. Any logo. Instant 3D.**
-
-<br/>
 
 [![Agent Skill](https://img.shields.io/badge/Agent_Skill-compatible-00C853?style=for-the-badge)](https://agentskills.io)&nbsp;
 [![Claude Code](https://img.shields.io/badge/Claude_Code-6C5CE7?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0wIDE4Yy00LjQyIDAtOC0zLjU4LTgtOHMzLjU4LTggOC04IDggMy41OCA4IDgtMy41OCA4LTggOHoiLz48L3N2Zz4=)](https://github.com/hasuwini77/3d-logo-skill)&nbsp;
