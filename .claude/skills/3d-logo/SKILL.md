@@ -129,51 +129,40 @@ function smoothOutline(outline: [number, number][], iterations: number): [number
 
 #### 2c. Rim geometry builder
 
-Build an indexed ring with a **semicircular cross-section** for realistic chrome reflections. Instead of a flat vertical strip (which reflects uniformly and looks banded), the rim is subdivided into segments that trace a half-cylinder profile from front edge to back edge. Each vertex's normal follows the semicircle, sweeping from forward-facing at the front face, through outward at the equator, to backward-facing at the back face:
+Build an indexed ring with manually computed tangent-based normals. Each vertex's outward normal is derived from the averaged tangent direction of its neighbors — this produces much smoother reflections than `computeVertexNormals()` which averages face normals:
 
 ```tsx
-function buildRim(outline: [number, number][], planeSize: number, thickness: number, segments = 8) {
+function buildRim(outline: [number, number][], planeSize: number, thickness: number) {
   const half = thickness / 2
   const s = planeSize
   const n = outline.length
-  const rows = segments + 1
   const positions: number[] = []
   const normals: number[] = []
   const indices: number[] = []
-
   for (let i = 0; i < n; i++) {
     const prev = outline[(i - 1 + n) % n]
     const curr = outline[i]
     const next = outline[(i + 1) % n]
+    // Averaged tangent → perpendicular = smooth outward normal
     const tx = next[0] - prev[0]
     const ty = next[1] - prev[1]
     const len = Math.sqrt(tx * tx + ty * ty) || 1
-    const outX = ty / len
-    const outY = -tx / len
-    const cx = curr[0] * s
-    const cy = curr[1] * s
-
-    for (let j = 0; j <= segments; j++) {
-      const angle = (j / segments) * Math.PI
-      const z = Math.cos(angle) * half
-      const bulge = Math.sin(angle) * half
-      positions.push(cx + outX * bulge, cy + outY * bulge, z)
-      normals.push(outX * Math.sin(angle), outY * Math.sin(angle), Math.cos(angle))
-    }
+    const nx = ty / len
+    const ny = -tx / len
+    const x = curr[0] * s
+    const y = curr[1] * s
+    positions.push(x, y, half)    // front vertex
+    normals.push(nx, ny, 0)
+    positions.push(x, y, -half)   // back vertex
+    normals.push(nx, ny, 0)
   }
-
   for (let i = 0; i < n; i++) {
     const i2 = (i + 1) % n
-    for (let j = 0; j < segments; j++) {
-      const a = i * rows + j
-      const b = i * rows + j + 1
-      const c = i2 * rows + j
-      const d = i2 * rows + j + 1
-      indices.push(a, b, c)
-      indices.push(b, d, c)
-    }
+    const f1 = i * 2, b1 = i * 2 + 1
+    const f2 = i2 * 2, b2 = i2 * 2 + 1
+    indices.push(f1, b1, f2)
+    indices.push(b1, b2, f2)
   }
-
   const geo = new BufferGeometry()
   geo.setAttribute('position', new Float32BufferAttribute(positions, 3))
   geo.setAttribute('normal', new Float32BufferAttribute(normals, 3))
@@ -182,7 +171,7 @@ function buildRim(outline: [number, number][], planeSize: number, thickness: num
 }
 ```
 
-**Why a semicircular cross-section:** A flat vertical strip (2 vertices per outline point) reflects the environment uniformly across its thickness — chrome amplifies this into visible horizontal bands. By subdividing into 8 segments with positions and normals that follow a half-cylinder arc, each ring of vertices catches light at a different angle. The front edge faces forward, the equator faces outward, the back edge faces backward — producing the smooth highlight sweep you see on real polished coin edges.
+**Why tangent-based normals:** `computeVertexNormals()` averages face normals weighted by area — with hundreds of thin horizontal quads, the face normals barely differ between neighbors, so averaging doesn't help. Computing normals from the outline tangent direction gives each vertex a geometrically correct outward normal that interpolates smoothly along the rim surface.
 
 #### 2d. Coin assembly
 
@@ -209,11 +198,10 @@ function Coin() {
         <meshBasicMaterial map={texture} side={FrontSide} transparent depthWrite={false} />
       </mesh>
       <mesh geometry={rimGeometry}>
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           color="#8ecae6" metalness={1.0} roughness={0.12}
           emissive="#06b6d4" emissiveIntensity={0.15}
           envMapIntensity={1.5} side={DoubleSide}
-          clearcoat={1.0} clearcoatRoughness={0.05}
         />
       </mesh>
     </group>
@@ -268,7 +256,6 @@ Place these at the top of the file so the user can easily adjust:
 | `THICKNESS` | 0.45 | Coin edge thickness |
 | `SPIN_SPEED` | 0.35 | Rotation speed (radians/sec) |
 | `BG_THRESHOLD` | 18 | Brightness cutoff for background removal (0-255) |
-| `RIM_SEGMENTS` | 8 | Subdivisions along the rim cross-section (higher = smoother chrome) |
 
 ### Step 5: Integration
 
