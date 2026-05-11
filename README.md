@@ -28,8 +28,18 @@ Chrome edges &bull; Environment reflections &bull; Zero 3D modeling.
 ## Install
 
 ```bash
+npx skills add hasuwini77/3d-logo-skill
+```
+
+<details>
+<summary>Other install methods</summary>
+
+```bash
+# Claude Code native
 claude install github:hasuwini77/3d-logo-skill
 ```
+
+</details>
 
 ## Usage
 
