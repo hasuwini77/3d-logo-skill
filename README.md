@@ -14,7 +14,7 @@ One command. Any logo. Instant 3D.
 
 <br/>
 
-<video src="screenshots/logo1.mp4" width="280" autoplay loop muted playsinline title="Phoenix Shield 3D coin"></video>&nbsp;&nbsp;&nbsp;<video src="screenshots/logo2.mp4" width="280" autoplay loop muted playsinline title="Cosmic Eye 3D coin"></video>&nbsp;&nbsp;&nbsp;<video src="screenshots/logo3.mp4" width="280" autoplay loop muted playsinline title="Wolf Compass 3D coin"></video>
+<img src="screenshots/logo1.webp" width="280" alt="Phoenix Shield 3D coin" />&nbsp;&nbsp;&nbsp;<img src="screenshots/logo2.webp" width="280" alt="Cosmic Eye 3D coin" />&nbsp;&nbsp;&nbsp;<img src="screenshots/logo3.webp" width="280" alt="Wolf Compass 3D coin" />
 
 <sub><b>Phoenix Shield</b> &nbsp;&bull;&nbsp; <b>Cosmic Eye</b> &nbsp;&bull;&nbsp; <b>Wolf Compass</b></sub>
 
