@@ -14,7 +14,7 @@ One command. Any logo. Instant 3D.
 
 <br/>
 
-<img src="screenshots/logo1.gif" width="280" alt="Phoenix Shield 3D coin" />&nbsp;&nbsp;&nbsp;<img src="screenshots/logo2.gif" width="280" alt="Cosmic Eye 3D coin" />&nbsp;&nbsp;&nbsp;<img src="screenshots/logo3.gif" width="280" alt="Wolf Compass 3D coin" />
+<video src="screenshots/logo1.mp4" width="280" autoplay loop muted playsinline title="Phoenix Shield 3D coin"></video>&nbsp;&nbsp;&nbsp;<video src="screenshots/logo2.mp4" width="280" autoplay loop muted playsinline title="Cosmic Eye 3D coin"></video>&nbsp;&nbsp;&nbsp;<video src="screenshots/logo3.mp4" width="280" autoplay loop muted playsinline title="Wolf Compass 3D coin"></video>
 
 <sub><b>Phoenix Shield</b> &nbsp;&bull;&nbsp; <b>Cosmic Eye</b> &nbsp;&bull;&nbsp; <b>Wolf Compass</b></sub>
 
@@ -98,6 +98,7 @@ import { SpinningLogo3D } from './SpinningLogo3D'
 3. **Face rendering** — two `PlaneGeometry` faces with correct UVs (readable on both sides)
 4. **Chrome rim** — indexed `BufferGeometry` ring with tangent-derived outward normals for smooth reflections
 5. **Reflections** — `MeshStandardMaterial` with `metalness: 1.0, roughness: 0.12` plus environment map for polished chrome
+6. **Normal map embossing** — Sobel filter generates a normal map at runtime for embossed depth on coin faces
 
 ## Customization
 
@@ -107,6 +108,7 @@ import { SpinningLogo3D } from './SpinningLogo3D'
 | `THICKNESS` | 0.45 | Coin edge thickness |
 | `SPIN_SPEED` | 0.35 | Rotation speed (rad/s) |
 | `BG_THRESHOLD` | 18 | Background removal sensitivity (0–255) |
+| `EMBOSS_STRENGTH` | 1.5 | Normal map depth (0 = flat, 3+ = deep) |
 
 ## Requirements
 
@@ -121,7 +123,7 @@ npm install -D @types/three
 2. Test locally with `claude install .`
 3. Open a PR with before/after examples
 
-Ideas: more presets, hover interactions, glow effects, shape detection improvements.
+Ideas: hover interactions, glow effects, shape detection improvements, custom shaders.
 
 ## License
 

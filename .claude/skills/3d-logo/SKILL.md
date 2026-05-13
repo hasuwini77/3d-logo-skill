@@ -42,12 +42,12 @@ The extension may lie (e.g., a `.png` that's actually JPEG). This matters becaus
 
 Create `SpinningLogo3D.tsx` using this architecture:
 
-#### 2a. Dynamic transparency generation
+#### 2a. Dynamic transparency generation and normal map
 
-The logo image likely has a dark/black background with no alpha channel. Convert dark pixels to transparent at runtime using an offscreen canvas:
+The logo image likely has a dark/black background with no alpha channel. Convert dark pixels to transparent at runtime using an offscreen canvas, and generate a normal map via Sobel filter for embossed depth on the coin faces. Requires `Vector2` and `LinearSRGBColorSpace` from Three.js in addition to the other imports:
 
 ```tsx
-function useTransparentTexture(logoPath: string, threshold = 18) {
+function useLogoTextures(logoPath: string, threshold = 18) {
   const srcTexture = useTexture(logoPath)
   return useMemo(() => {
     const img = srcTexture.image as HTMLImageElement
@@ -63,9 +63,40 @@ function useTransparentTexture(logoPath: string, threshold = 18) {
       if (brightness < threshold) d[i + 3] = 0
     }
     ctx.putImageData(imageData, 0, 0)
-    const tex = new CanvasTexture(canvas)
-    tex.colorSpace = SRGBColorSpace
-    return tex
+    const colorTexture = new CanvasTexture(canvas)
+    colorTexture.colorSpace = SRGBColorSpace
+
+    // Generate normal map from brightness using Sobel filter
+    const w = canvas.width, h = canvas.height
+    const normalCanvas = document.createElement('canvas')
+    normalCanvas.width = w
+    normalCanvas.height = h
+    const nCtx = normalCanvas.getContext('2d')!
+    const normalData = nCtx.createImageData(w, h)
+    const nd = normalData.data
+    const bright = (x: number, y: number) => {
+      const cx = Math.max(0, Math.min(w - 1, x))
+      const cy = Math.max(0, Math.min(h - 1, y))
+      const i = (cy * w + cx) * 4
+      return (d[i] + d[i + 1] + d[i + 2]) / 765
+    }
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const dx = bright(x + 1, y) - bright(x - 1, y)
+        const dy = bright(x, y + 1) - bright(x, y - 1)
+        const len = Math.sqrt(dx * dx + dy * dy + 1)
+        const i = (y * w + x) * 4
+        nd[i]     = ((-dx / len) * 0.5 + 0.5) * 255
+        nd[i + 1] = ((-dy / len) * 0.5 + 0.5) * 255
+        nd[i + 2] = ((1   / len) * 0.5 + 0.5) * 255
+        nd[i + 3] = d[i + 3]
+      }
+    }
+    nCtx.putImageData(normalData, 0, 0)
+    const normalMap = new CanvasTexture(normalCanvas)
+    normalMap.colorSpace = LinearSRGBColorSpace
+
+    return { colorTexture, normalMap }
   }, [srcTexture, threshold])
 }
 ```
@@ -182,7 +213,7 @@ Two `PlaneGeometry` faces (front + back) with the transparent texture. The back 
 ```tsx
 function Coin() {
   const groupRef = useRef<Group>(null)
-  const { texture, rimGeometry } = useLogoAssets()
+  const { colorTexture, normalMap, rimGeometry } = useLogoAssets()
   useFrame((_, delta) => {
     if (groupRef.current) groupRef.current.rotation.y += delta * SPIN_SPEED
   })
@@ -191,11 +222,31 @@ function Coin() {
     <group ref={groupRef}>
       <mesh position={[0, 0, half]}>
         <planeGeometry args={[PLANE_SIZE, PLANE_SIZE]} />
-        <meshBasicMaterial map={texture} side={FrontSide} transparent depthWrite={false} />
+        <meshStandardMaterial
+          map={colorTexture}
+          normalMap={normalMap}
+          normalScale={new Vector2(EMBOSS_STRENGTH, EMBOSS_STRENGTH)}
+          metalness={0.15}
+          roughness={0.35}
+          envMapIntensity={0.4}
+          side={FrontSide}
+          transparent
+          depthWrite={false}
+        />
       </mesh>
       <mesh position={[0, 0, -half]} rotation={[0, Math.PI, 0]}>
         <planeGeometry args={[PLANE_SIZE, PLANE_SIZE]} />
-        <meshBasicMaterial map={texture} side={FrontSide} transparent depthWrite={false} />
+        <meshStandardMaterial
+          map={colorTexture}
+          normalMap={normalMap}
+          normalScale={new Vector2(EMBOSS_STRENGTH, EMBOSS_STRENGTH)}
+          metalness={0.15}
+          roughness={0.35}
+          envMapIntensity={0.4}
+          side={FrontSide}
+          transparent
+          depthWrite={false}
+        />
       </mesh>
       <mesh geometry={rimGeometry}>
         <meshStandardMaterial
@@ -210,6 +261,8 @@ function Coin() {
 ```
 
 #### 2e. Canvas and lighting
+
+`preserveDrawingBuffer: true` enables `toDataURL()` for screenshots — can be set to `false` for slightly better GPU performance if not needed.
 
 ```tsx
 export function SpinningLogo3D({ size = 540 }: { size?: number }) {
@@ -256,6 +309,7 @@ Place these at the top of the file so the user can easily adjust:
 | `THICKNESS` | 0.45 | Coin edge thickness |
 | `SPIN_SPEED` | 0.35 | Rotation speed (radians/sec) |
 | `BG_THRESHOLD` | 18 | Brightness cutoff for background removal (0-255) |
+| `EMBOSS_STRENGTH` | 1.5 | Normal map intensity (0 = flat, 3+ = deep emboss) |
 
 ### Step 5: Integration
 
@@ -274,6 +328,8 @@ Wrap the component in `<Suspense>` when used — the texture loading suspends in
 - **Use `DoubleSide` on the rim material** — the perimeter winding creates mixed normal directions. DoubleSide ensures all faces render regardless.
 - **Use `depthWrite={false}`** on the transparent face materials — prevents z-fighting between front and back faces during rotation.
 - **Check the actual file format** — `.png` files are sometimes JPEG internally. JPEG has no alpha, so transparency must always be generated from brightness.
+- **Normal maps MUST use `LinearSRGBColorSpace`** — setting `SRGBColorSpace` on a normal map gamma-corrects the direction vectors, producing incorrect lighting and a flat appearance.
+- **`preserveDrawingBuffer: true` enables screenshots** — without it, `toDataURL()` returns blank frames. Can be set to `false` for slightly better GPU performance if screenshots aren't needed.
 
 ## Rim color customization
 
